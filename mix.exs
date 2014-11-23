@@ -5,7 +5,15 @@ defmodule Datomex.Mixfile do
     [app: :datomex,
      version: "0.0.1",
      elixir: "~> 1.0",
-     deps: deps]
+     deps: deps
+     package: [
+       contributors: ["Eric West"],
+       licenses: ["MIT"],
+       links: %{github: "https://github.com/edubkendo/datomex"}
+       ],
+       description: """
+       Low level Elixir driver for the Datomic Database.
+       """]
   end
 
   # Configuration for the OTP application

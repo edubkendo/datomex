@@ -1,7 +1,7 @@
 Datomex
 =======
 
-Low level Elixir drivers for the Datomic database.
+Low level Elixir drivers for the [Datomic database](http://www.datomic.com/).
 
 ## Install
 
