@@ -29,4 +29,10 @@ defmodule DatomexTest do
     {:ok, {:vector, databases}} = :erldn.parse_str(String.to_char_list(body))
     assert Enum.any?(databases, fn(x) -> x == "test" end)
   end
+
+  test "creates a database with alias" do
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.create_database("db", "test")
+    {:ok, {:vector, databases}} = :erldn.parse_str(String.to_char_list(body))
+    assert Enum.any?(databases, fn(x) -> x == "test" end)
+  end
 end

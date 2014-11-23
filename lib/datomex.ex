@@ -34,4 +34,10 @@ defmodule Datomex do
              |> URI.encode_query
     HTTPoison.post("#{root}data/#{alias_db}/?" <> params, "")
   end
+
+  def create_database(alias_name, name) do
+    params = %{"db-name": name}
+             |> URI.encode_query
+    HTTPoison.post("#{root}data/#{alias_name}/?" <> params, "")
+  end
 end
