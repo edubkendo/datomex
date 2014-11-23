@@ -27,7 +27,8 @@ defmodule Datomex.Mixfile do
   defp deps do
     [
         {:erldn, git: "git://github.com/marianoguerra/erldn.git"},
-        {:httpoison, "~> 0.5"}
+        {:httpoison, "~> 0.5"},
+        {:poison, "~> 1.2"}
     ]
   end
 end

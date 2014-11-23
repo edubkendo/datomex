@@ -20,4 +20,18 @@ defmodule Datomex do
   def storages do
     HTTPoison.get("#{root}data/")
   end
+
+  def databases do
+    HTTPoison.get("#{root}data/#{alias_db}/")
+  end
+
+  def databases(alias_name) do
+    HTTPoison.get("#{root}data/#{alias_name}/")
+  end
+
+  def create_database(name) do
+    params = %{"db-name": name}
+             |> URI.encode_query
+    HTTPoison.post("#{root}data/#{alias_db}/?" <> params, "")
+  end
 end
