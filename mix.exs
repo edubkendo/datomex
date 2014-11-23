@@ -3,7 +3,7 @@ defmodule Datomex.Mixfile do
 
   def project do
     [app: :datomex,
-     version: "0.0.1",
+     version: "0.0.2",
      elixir: "~> 1.0",
      deps: deps,
      package: [
@@ -11,7 +11,7 @@ defmodule Datomex.Mixfile do
        licenses: ["MIT"],
        links: %{github: "https://github.com/edubkendo/datomex"}
        ],
-       description: """
+     description: """
        Low level Elixir driver for the Datomic Database.
        """]
   end
@@ -34,7 +34,7 @@ defmodule Datomex.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-        {:erldn, git: "git://github.com/marianoguerra/erldn.git"},
+        {:erldn, "~> 1.0.0"},
         {:httpoison, "~> 0.5"},
         {:poison, "~> 1.2"}
     ]
