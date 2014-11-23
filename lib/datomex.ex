@@ -1,5 +1,3 @@
-require IEx
-
 defmodule Datomex do
   def start_link(server, port, alias_db, name) do
     config = %Datomex.Config{ server: server, port: port, alias_db: alias_db, name: name }
