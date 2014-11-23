@@ -1,6 +1,6 @@
 defmodule Datomex do
   def start_link(server, port, alias_db, name) do
-    config = %Datomex.Config{ server: server, port: port, alias_db: alias_db, name: name } 
+    config = %Datomex.Config{ server: server, port: port, alias_db: alias_db, name: name }
     {:ok, _pid} = Agent.start_link(fn -> config end, name: :config)
   end
 
@@ -49,6 +49,13 @@ defmodule Datomex do
 
   def datoms(index) do
     params = %{"index": index}
+      |> URI.encode_query
+    HTTPoison.get "#{db_uri_}datoms?#{params}"
+  end
+
+  def datoms(index, opts) do
+    params = %{index: index}
+      |> Enum.into(opts)
       |> URI.encode_query
     HTTPoison.get "#{db_uri_}datoms?#{params}"
   end

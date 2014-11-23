@@ -63,4 +63,10 @@ defmodule DatomexTest do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.datoms "eavt"
     assert String.length(body) > 0
   end
+
+  test "gets datoms with options" do
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.datoms("eavt", %{limit: 1})
+    {:ok, {:vector, datoms}} = :erldn.parse_str(String.to_char_list(body))
+    assert Enum.count(datoms) == 1
+  end
 end
