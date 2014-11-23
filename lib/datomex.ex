@@ -1,3 +1,5 @@
+require IEx
+
 defmodule Datomex do
   def start_link(server, port, alias_db, name) do
     config = %Datomex.Config{ server: server, port: port, alias_db: alias_db, name: name }
@@ -55,6 +57,19 @@ defmodule Datomex do
 
   def datoms(index, opts) do
     params = %{index: index}
+      |> Enum.into(opts)
+      |> URI.encode_query
+    HTTPoison.get "#{db_uri_}datoms?#{params}"
+  end
+
+  def index_range(index, attrid) do
+    params = %{index: index, a: attrid}
+      |> URI.encode_query
+    HTTPoison.get "#{db_uri_}datoms?#{params}"
+  end
+  
+  def index_range(index, attrid, opts) do
+    params = %{index: index, a: attrid}
       |> Enum.into(opts)
       |> URI.encode_query
     HTTPoison.get "#{db_uri_}datoms?#{params}"

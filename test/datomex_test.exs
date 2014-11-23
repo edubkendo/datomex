@@ -69,4 +69,15 @@ defmodule DatomexTest do
     {:ok, {:vector, datoms}} = :erldn.parse_str(String.to_char_list(body))
     assert Enum.count(datoms) == 1
   end
+
+  test "gets a range of index data" do
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.index_range("eavt", "db/ident")
+    assert String.length(body) > 0
+  end
+
+  test "gets a range of index data with options" do
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.index_range("eavt", "db/ident", %{limit: 1})
+    {:ok, {:vector, datoms}} = :erldn.parse_str(String.to_char_list(body))
+    assert Enum.count(datoms) == 1
+  end
 end
