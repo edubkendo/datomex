@@ -46,4 +46,10 @@ defmodule Datomex do
       |> URI.encode_query
     HTTPoison.post("#{db_uri}?" <> params, "", %{"Accept-Header" => "application/edn"})
   end
+
+  def datoms(index) do
+    params = %{"index": index}
+      |> URI.encode_query
+    HTTPoison.get "#{db_uri_}datoms?#{params}"
+  end
 end

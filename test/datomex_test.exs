@@ -58,4 +58,9 @@ defmodule DatomexTest do
      {:ok, {:map, tx}} = :erldn.parse_str(String.to_char_list(body))
      assert Keyword.has_key? tx, :"db-after"
   end
+
+  test "gets datoms" do
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.datoms "eavt"
+    assert String.length(body) > 0
+  end
 end
