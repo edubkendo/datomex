@@ -87,3 +87,4 @@ Datomex.transact(~s([[:db/add #db/id [:db.part/user] :movie/title "trainspotting
 
 ## TODO
 - Use `erldn` to make working with the data and queries nicer
+- Add docs
