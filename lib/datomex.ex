@@ -91,4 +91,30 @@ defmodule Datomex do
       |> URI.encode_query
     HTTPoison.get "#{db_uri_}entity?#{params}"
   end
+
+  def q(query) do
+    params = %{q: query, args: "[{:db/alias \"#{db_alias}\"}]"}
+      |> URI.encode_query
+    HTTPoison.get "#{root}api/query?#{params}"
+  end
+
+  def q(query, opts) when is_map(opts) do
+    params = %{q: query, args: "[{:db/alias \"#{db_alias}\"}]"}
+      |> Enum.into(opts)
+      |> URI.encode_query
+    HTTPoison.get "#{root}api/query?#{params}"
+  end
+
+  def q(query, args) do
+    params = %{q: query, args: args}
+      |> URI.encode_query
+    HTTPoison.get "#{root}api/query?#{params}"
+  end
+
+  def q(query, args, opts) do
+    params = %{q: query, args: args}
+      |> Enum.into(opts)
+      |> URI.encode_query
+    HTTPoison.get "#{root}api/query?#{params}"
+  end
 end

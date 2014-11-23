@@ -98,4 +98,32 @@ defmodule DatomexTest do
     {:ok, {:map, entity}} = :erldn.parse_str(String.to_char_list(body))
     assert Keyword.fetch(entity, :"db/id") == {:ok, 1}
   end
+
+  test "query" do
+    Datomex.transact(~s([[:db/add #db/id [:db.part/user] :movie/title "trainspotting"]]))
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q(~s([:find ?m :where [?m :movie/title "trainspotting"]]))
+    {:ok, {:vector, movies}} = :erldn.parse_str(String.to_char_list(body)) 
+    {:ok, [movie |t]} = Keyword.fetch(movies, :vector)
+    assert movie > 1
+  end
+
+  test "query with options" do
+    Datomex.transact("[[:db/add #db/id [:db.part/user] :movie/title \"the matrix\"]]")
+    Datomex.transact("[[:db/add #db/id [:db.part/user] :movie/title \"the matrix reloaded\"]]")
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q("[:find ?m :where [?m :movie/title]]", %{ limit: 1, offset: 2 })
+    {:ok, {:vector, movies}} = :erldn.parse_str(String.to_char_list(body)) 
+    {:ok, [movie |t]} = Keyword.fetch(movies, :vector)
+    assert movie > 1
+  end
+
+  test "query with args" do
+    args = """
+[
+        ["Doe" "John" "jdoe@example.com"]
+        ["jdoe@example.com" 71]
+]
+"""
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q("[:find ?first ?height :in [?last ?first ?email] [?email ?height]]", args)
+    assert :erldn.parse_str(String.to_char_list(body)) == {:ok, {:vector, [vector: ["John", 71]]}}
+  end
 end
