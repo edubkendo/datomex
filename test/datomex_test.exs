@@ -1,6 +1,23 @@
 defmodule DatomexTest do
   use ExUnit.Case
 
+  @movies """
+[
+  {:db/id #db/id[:db.part/db]
+   :db/ident :movie/title
+   :db/valueType :db.type/string
+   :db/cardinality :db.cardinality/one
+   :db/doc "movie's title"
+   :db.install/_attribute :db.part/db}
+  {:db/id #db/id[:db.part/db]
+   :db/ident :movie/rating
+   :db/valueType :db.type/double
+   :db/cardinality :db.cardinality/one
+   :db/doc "movie's rating"
+   :db.install/_attribute :db.part/db}
+]
+"""
+
   setup do
     Datomex.start_link "localhost", 8888, "db", "test"
     :ok
@@ -34,5 +51,11 @@ defmodule DatomexTest do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.create_database("db", "test")
     {:ok, {:vector, databases}} = :erldn.parse_str(String.to_char_list(body))
     assert Enum.any?(databases, fn(x) -> x == "test" end)
+  end
+
+  test "makes transactions" do
+     {:ok, %HTTPoison.Response{ body: body }} = Datomex.transact @movies
+     {:ok, {:map, tx}} = :erldn.parse_str(String.to_char_list(body))
+     assert Keyword.has_key? tx, :"db-after"
   end
 end

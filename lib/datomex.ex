@@ -40,4 +40,10 @@ defmodule Datomex do
              |> URI.encode_query
     HTTPoison.post("#{root}data/#{alias_name}/?" <> params, "")
   end
+
+  def transact(data) do
+    params = %{"tx-data": data}
+      |> URI.encode_query
+    HTTPoison.post("#{db_uri}?" <> params, "", %{"Accept-Header" => "application/edn"})
+  end
 end
