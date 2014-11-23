@@ -72,4 +72,23 @@ defmodule Datomex do
       |> URI.encode_query
     HTTPoison.get "#{db_uri_}datoms?#{params}"
   end
+  
+  def entity(opts) when is_map(opts) do
+    params = opts
+      |> URI.encode_query
+    HTTPoison.get "#{db_uri_}entity?#{params}"
+  end
+
+  def entity(eid) do
+    params = %{e: eid}
+      |> URI.encode_query
+    HTTPoison.get "#{db_uri_}entity?#{params}"
+  end
+  
+  def entity(eid, opts) do
+    params = %{e: eid}
+      |> Enum.into(opts)
+      |> URI.encode_query
+    HTTPoison.get "#{db_uri_}entity?#{params}"
+  end
 end

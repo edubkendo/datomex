@@ -80,4 +80,22 @@ defmodule DatomexTest do
     {:ok, {:vector, datoms}} = :erldn.parse_str(String.to_char_list(body))
     assert Enum.count(datoms) == 1
   end
+
+  test "get an entity" do
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.entity 1
+    {:ok, {:map, entity}} = :erldn.parse_str(String.to_char_list(body))
+    assert Keyword.fetch(entity, :"db/id") == {:ok, 1}
+  end
+
+  test "get an entity with options" do
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.entity(%{e: 1, since: 0})
+    {:ok, {:map, entity}} = :erldn.parse_str(String.to_char_list(body))
+    assert Keyword.fetch(entity, :"db/id") == {:ok, 1}
+  end
+
+  test "get an entity with entity and options" do
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.entity(%{e: 1, since: 0})
+    {:ok, {:map, entity}} = :erldn.parse_str(String.to_char_list(body))
+    assert Keyword.fetch(entity, :"db/id") == {:ok, 1}
+  end
 end
