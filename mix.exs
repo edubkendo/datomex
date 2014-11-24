@@ -3,13 +3,14 @@ defmodule Datomex.Mixfile do
 
   def project do
     [app: :datomex,
-     version: "0.0.2",
+     version: "0.0.5",
      elixir: "~> 1.0",
      deps: deps,
      package: [
        contributors: ["Eric West"],
        licenses: ["MIT"],
-       links: %{github: "https://github.com/edubkendo/datomex"}
+       links: %{github: "https://github.com/edubkendo/datomex",
+                docs: "http://hexdocs.pm/datomex"}
        ],
      description: """
        Low level Elixir driver for the Datomic Database.
@@ -36,7 +37,8 @@ defmodule Datomex.Mixfile do
     [
         {:erldn, "~> 1.0.2"},
         {:httpoison, "~> 0.5"},
-        {:poison, "~> 1.2"}
+        {:poison, "~> 1.2"},
+        {:ex_doc, "~> 0.6.1"}
     ]
   end
 end

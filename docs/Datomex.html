@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Datomex</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+    <script type="text/javascript" charset="utf-8">
+      relpath = '';
+      if (relpath != '') relpath += '/';
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+  </head>
+
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+
+    <div id="content">
+      <div class="breadcrumbs">datomex v0.0.5 &rarr; <a href="overview.html">Overview</a> &rarr; <a href="Datomex.html">Datomex</a></div>
+
+      <h1>
+        Datomex
+        
+      </h1>
+
+      <ul class="summary_links">
+        
+          <li><a href="#summary">Summary</a></li>
+        
+        
+        
+          <li><a href="#functions_details">Functions</a></li>
+        
+        
+        
+      </ul>
+
+      
+        <div id="moduledoc" class="docstring">
+          <p>Datomex is a low level driver for the Datomic database.</p>
+<p>Datomex utilizes Datomic's REST API, so in order to use Datomex, a Datomic peer to serve as an HTTP server must be running. The peer can be executed with the following:</p>
+<pre><code>bin/rest -p port [-o origins]? [alias uri]+</code></pre>
+<p>For example, to run Datomex's tests, start Datomic with:</p>
+<pre><code>bin/rest -p 8888 -o /&#39;*&#39;/  db datomic:mem://</code></pre>
+<p>More information about the REST API is available at http://docs.datomic.com/rest.html .</p>
+<p>Datomex must be initialized by calling <code>start_link</code> and passing in the <code>server</code>, <code>port</code>, <code>alias</code> and <code>name</code>. For example:</p>
+<pre><code>Datomex.start_link &quot;localhost&quot;, 8888, &quot;db&quot;, &quot;test&quot;</code></pre>
+<ul>
+<li><code>server</code> - the host where Datomic is running, as a binary, example: <code>&quot;localhost&quot;</code></li>
+<li><code>port</code> - the port where Datomic is running as an integer, example: <code>80</code></li>
+<li><code>alias_db</code> - the name of the alias for the datomic uri, example: <code>&quot;db&quot;</code></li>
+<li><code>name</code> - the name of the default database, example: <code>&quot;test&quot;</code></li>
+</ul>
+
+        </div>
+      
+
+      
+
+      
+        <h2 id="summary">Summary<div class="detail_header_links"><a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a></div></h2>
+        <table class="summary">
+          <tr>
+  <td class="summary_signature"><a href="#create_database/1">create_database(name)</a></td>
+  
+    <td class="summary_synopsis"><p>Create a new database at the configured alias</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#create_database/2">create_database(alias_name, name)</a></td>
+  
+    <td class="summary_synopsis"><p>Create a new database at the passed in alias</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#databases/0">databases()</a></td>
+  
+    <td class="summary_synopsis"><p>Get a list of Datomic databases from the configured alias</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#databases/1">databases(alias_name)</a></td>
+  
+    <td class="summary_synopsis"><p>Get a list of Datomic databases from a passed in alias</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#datoms/1">datoms(index)</a></td>
+  
+    <td class="summary_synopsis"><p>Get some datoms from Datomic by index</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#datoms/2">datoms(index, opts)</a></td>
+  
+    <td class="summary_synopsis"><p>Get some datoms from Datomic by index with optional arguments</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#entity/1">entity(opts)</a></td>
+  
+    <td class="summary_synopsis"><p>Get an entity from Datomic</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#entity/2">entity(eid, opts)</a></td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#index_range/2">index_range(index, attrid)</a></td>
+  
+    <td class="summary_synopsis"><p>Get a range of index data</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#index_range/3">index_range(index, attrid, opts)</a></td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#q/1">q(query)</a></td>
+  
+    <td class="summary_synopsis"><p>Query datomic</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#q/2">q(query, opts)</a></td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#q/3">q(query, args, opts)</a></td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#start_link/4">start_link(server, port, alias_db, name)</a></td>
+  
+    <td class="summary_synopsis"><p>Configures Datomex for connection with your Datomic Peer</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#storages/0">storages()</a></td>
+  
+    <td class="summary_synopsis"><p>Get a list of Datomic storages</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#transact/1">transact(data)</a></td>
+  
+    <td class="summary_synopsis"><p>Send a transaction to Datomic</p>
+</td>
+  
+</tr>
+
+        </table>
+      
+
+      
+
+      
+        <div id="functions_details" class="details_list">
+          <h2>Functions</h2>
+          <div class="detail">
+  <div class="detail_header" id="create_database/1">
+    <span class="signature"><strong>create_database(name)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#create_database/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Create a new database at the configured alias.</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="create_database/2">
+    <span class="signature"><strong>create_database(alias_name, name)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#create_database/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Create a new database at the passed in alias.</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="databases/0">
+    <span class="signature"><strong>databases()</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#databases/0" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Get a list of Datomic databases from the configured alias.</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="databases/1">
+    <span class="signature"><strong>databases(alias_name)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#databases/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Get a list of Datomic databases from a passed in alias.</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="datoms/1">
+    <span class="signature"><strong>datoms(index)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#datoms/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Get some datoms from Datomic by index.</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="datoms/2">
+    <span class="signature"><strong>datoms(index, opts)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#datoms/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Get some datoms from Datomic by index with optional arguments.</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="entity/1">
+    <span class="signature"><strong>entity(opts)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#entity/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Get an entity from Datomic.</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="entity/2">
+    <span class="signature"><strong>entity(eid, opts)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#entity/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"></div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="index_range/2">
+    <span class="signature"><strong>index_range(index, attrid)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#index_range/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Get a range of index data.</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="index_range/3">
+    <span class="signature"><strong>index_range(index, attrid, opts)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#index_range/3" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"></div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="q/1">
+    <span class="signature"><strong>q(query)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#q/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Query datomic.</p>
+<pre><code>Datomex.q(~s([:find ?m :where [?m :movie/title &quot;trainspotting&quot;]]))</code></pre>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="q/2">
+    <span class="signature"><strong>q(query, opts)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#q/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"></div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="q/3">
+    <span class="signature"><strong>q(query, args, opts)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#q/3" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"></div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="start_link/4">
+    <span class="signature"><strong>start_link(server, port, alias_db, name)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#start_link/4" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Configures Datomex for connection with your Datomic Peer.</p>
+<pre><code>Datomex.start_link &quot;localhost&quot;, 8888, &quot;db&quot;, &quot;test&quot;</code></pre>
+<ul>
+<li><code>server</code> - the host where Datomic is running, as a binary, example: <code>&quot;localhost&quot;</code></li>
+<li><code>port</code> - the port where Datomic is running as an integer, example: <code>80</code></li>
+<li><code>alias_db</code> - the name of the alias for the datomic uri, example: <code>&quot;db&quot;</code></li>
+<li><code>name</code> - the name of the default database, example: <code>&quot;test&quot;</code></li>
+</ul>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="storages/0">
+    <span class="signature"><strong>storages()</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#storages/0" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Get a list of Datomic storages</p>
+<p>iex&gt; Datomex.storages {:ok, %HTTPoison.Response{body: &quot;[&quot;db&quot;]&quot;, headers: %{&quot;Content-Length&quot; =&gt; &quot;6&quot;, &quot;Content-Type&quot; =&gt; &quot;application/edn;charset=UTF-8&quot;, &quot;Date&quot; =&gt; &quot;Mon, 24 Nov 2014 10:14:24 GMT&quot;, &quot;Server&quot; =&gt; &quot;Jetty(8.1.11.v20130520)&quot;, &quot;Vary&quot; =&gt; &quot;Accept&quot;}, status_code: 200}}</p>
+</div>
+  
+</div>
+<div class="detail">
+  <div class="detail_header" id="transact/1">
+    <span class="signature"><strong>transact(data)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#transact/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <div class="docstring"><p>Send a transaction to Datomic.</p>
+<pre><code>movies = ~s([
+  {:db/id #db/id[:db.part/db]
+  :db/ident :movie/title
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc &quot;movie&#39;s title&quot;
+  :db.install/_attribute :db.part/db}
+  {:db/id #db/id[:db.part/db]
+  :db/ident :movie/rating
+  :db/valueType :db.type/double
+  :db/cardinality :db.cardinality/one
+  :db/doc &quot;movie&#39;s rating&quot;
+  :db.install/_attribute :db.part/db}
+])
+Datomex.transact movies</code></pre>
+</div>
+  
+</div>
+
+        </div>
+      
+
+      
+
+      
+    </div>
+  </body>
+</html>

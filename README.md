@@ -3,6 +3,8 @@ Datomex
 
 Low level Elixir drivers for the [Datomic database](http://www.datomic.com/).
 
+API Docs at: http://hexdocs.pm/datomex
+
 ## Install
 
 Adding Datomex to your mix.exs dependencies:
