@@ -103,7 +103,7 @@ defmodule DatomexTest do
     Datomex.transact(~s([[:db/add #db/id [:db.part/user] :movie/title "trainspotting"]]))
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.q(~s([:find ?m :where [?m :movie/title "trainspotting"]]))
     {:ok, {:vector, movies}} = :erldn.parse_str(String.to_char_list(body)) 
-    {:ok, [movie |t]} = Keyword.fetch(movies, :vector)
+    {:ok, [movie |_t]} = Keyword.fetch(movies, :vector)
     assert movie > 1
   end
 
@@ -112,7 +112,7 @@ defmodule DatomexTest do
     Datomex.transact("[[:db/add #db/id [:db.part/user] :movie/title \"the matrix reloaded\"]]")
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.q("[:find ?m :where [?m :movie/title]]", %{ limit: 1, offset: 2 })
     {:ok, {:vector, movies}} = :erldn.parse_str(String.to_char_list(body)) 
-    {:ok, [movie |t]} = Keyword.fetch(movies, :vector)
+    {:ok, [movie |_t]} = Keyword.fetch(movies, :vector)
     assert movie > 1
   end
 
