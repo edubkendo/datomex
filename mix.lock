@@ -1,4 +1,4 @@
-%{"erldn": {:hex, :erldn, "1.0.0"},
+%{"erldn": {:hex, :erldn, "1.0.2"},
   "hackney": {:hex, :hackney, "0.14.3"},
   "httpoison": {:hex, :httpoison, "0.5.0"},
   "idna": {:hex, :idna, "1.0.1"},

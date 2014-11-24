@@ -34,7 +34,7 @@ defmodule Datomex.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-        {:erldn, "~> 1.0.0"},
+        {:erldn, "~> 1.0.2"},
         {:httpoison, "~> 0.5"},
         {:poison, "~> 1.2"}
     ]
