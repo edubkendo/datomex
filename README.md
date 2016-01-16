@@ -7,11 +7,12 @@ API Docs at: http://hexdocs.pm/datomex
 
 ## Install
 
-Adding Datomex to your mix.exs dependencies:
+Add Datomex and HTTPoison to your mix.exs dependencies:
 
 ```elixir
 def deps do
-[ {:datomex, "~> 0.0.1"} ]
+[ {:datomex, "~> 0.0.1"},
+  {:httpoison, "~> 0.8.0" } ]
 end
 ```
 
