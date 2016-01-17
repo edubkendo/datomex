@@ -88,6 +88,13 @@ movies = Exdn.to_elixir!(body)
 # vector: [17592186045524], vector: [17592186045521]]
 ```
 
+## Related Projects
+
+The [Exdn edn parser library](https://github.com/psfblair/exdn) 
+([API docs](http://hexdocs.pm/exdn/1.0.1/api-reference.html)) may be used with
+Datomex, both to parse incoming edn and to generate edn strings from Elixir data
+structures. Some examples of how this can be done may be found in the tests.
+
 ## TODO
-- Use `exdn` to make working with the data and queries nicer
 - Add docs
+- Tighter integration with `exdn`.
