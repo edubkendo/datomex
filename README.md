@@ -79,7 +79,7 @@ Datomex.entity 1
 
 Datomex.transact(~s([[:db/add #db/id [:db.part/user] :movie/title "trainspotting"]]))
 {:ok, %HTTPoison.Response{ body: body }} = Datomex.q(~s([:find ?m :where [?m :movie/title "trainspotting"]]))
-{:ok, {:vector, movies}} = :erldn.parse_str(String.to_char_list(body))
+movies = Exdn.to_elixir!(body)
 # [vector: [17592186045486], vector: [17592186045538], vector: [17592186045481],
 # vector: [17592186045483], vector: [17592186045478], vector: [17592186045509],
 # vector: [17592186045474], vector: [17592186045468], vector: [17592186045503],
@@ -89,5 +89,5 @@ Datomex.transact(~s([[:db/add #db/id [:db.part/user] :movie/title "trainspotting
 ```
 
 ## TODO
-- Use `erldn` to make working with the data and queries nicer
+- Use `exdn` to make working with the data and queries nicer
 - Add docs
