@@ -91,7 +91,7 @@ movies = Exdn.to_elixir!(body)
 ## Related Projects
 
 The [Exdn edn parser library](https://github.com/psfblair/exdn) 
-([API docs](http://hexdocs.pm/exdn/1.0.1/api-reference.html)) may be used with
+([API docs](http://hexdocs.pm/exdn/2.1.1/api-reference.html)) may be used with
 Datomex, both to parse incoming edn and to generate edn strings from Elixir data
 structures. Some examples of how this can be done may be found in the tests.
 
