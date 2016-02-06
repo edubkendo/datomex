@@ -1,22 +1,20 @@
 defmodule DatomexTest do
   use ExUnit.Case
 
-  @movies """
-[
-  {:db/id #db/id[:db.part/db]
-   :db/ident :movie/title
-   :db/valueType :db.type/string
-   :db/cardinality :db.cardinality/one
-   :db/doc "movie's title"
-   :db.install/_attribute :db.part/db}
-  {:db/id #db/id[:db.part/db]
-   :db/ident :movie/rating
-   :db/valueType :db.type/double
-   :db/cardinality :db.cardinality/one
-   :db/doc "movie's rating"
-   :db.install/_attribute :db.part/db}
-]
-"""
+  def movies, do: [
+    %{"db/id": dbid(:"db.part/db"),
+      "db/ident": :"movie/title",
+      "db/valueType": :"db.type/string",
+      "db/cardinality": :"db.cardinality/one",
+      "db/doc": "movie's title",
+      "db.install/_attribute": :"db.part/db"},
+    %{"db/id": dbid(:"db.part/db"),
+      "db/ident": :"movie/rating",
+      "db/valueType": :"db.type/double",
+      "db/cardinality": :"db.cardinality/one",
+      "db/doc": "movie's rating",
+      "db.install/_attribute": :"db.part/db"}
+    ] |> Exdn.from_elixir!
 
   setup do
     Datomex.start_link "localhost", 8888, "db", "test"
@@ -25,38 +23,38 @@ defmodule DatomexTest do
 
   test "fetches available storages" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.storages
-    {:ok, {:vector, storage}} = :erldn.parse_str(String.to_char_list(body))
+    storage = Exdn.to_elixir!(body)
     assert Enum.any?(storage, fn(x) -> x == "db" end)
   end
 
   test "fetches a list of databases" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.databases
-    {:ok, {:vector, databases}} = :erldn.parse_str(String.to_char_list(body))
+    databases = Exdn.to_elixir!(body)
     assert Enum.any?(databases, fn(x) -> x == "test" end)
   end
 
   test "fetches a list of databases for a storage alias" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.databases("db")
-    {:ok, {:vector, databases}} = :erldn.parse_str(String.to_char_list(body))
+    databases = Exdn.to_elixir!(body)
     assert Enum.any?(databases, fn(x) -> x == "test" end)
   end
 
   test "creates a database" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.create_database("test")
-    {:ok, {:vector, databases}} = :erldn.parse_str(String.to_char_list(body))
+    databases = Exdn.to_elixir!(body)
     assert Enum.any?(databases, fn(x) -> x == "test" end)
   end
 
   test "creates a database with alias" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.create_database("db", "test")
-    {:ok, {:vector, databases}} = :erldn.parse_str(String.to_char_list(body))
+    databases = Exdn.to_elixir!(body)
     assert Enum.any?(databases, fn(x) -> x == "test" end)
   end
 
   test "makes transactions" do
-     {:ok, %HTTPoison.Response{ body: body }} = Datomex.transact @movies
-     {:ok, {:map, tx}} = :erldn.parse_str(String.to_char_list(body))
-     assert Keyword.has_key? tx, :"db-after"
+     {:ok, %HTTPoison.Response{ body: body }} = Datomex.transact movies
+     tx = Exdn.to_elixir!(body)
+     assert Map.has_key? tx, :"db-after"
   end
 
   test "gets datoms" do
@@ -66,7 +64,7 @@ defmodule DatomexTest do
 
   test "gets datoms with options" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.datoms("eavt", %{limit: 1})
-    {:ok, {:vector, datoms}} = :erldn.parse_str(String.to_char_list(body))
+    datoms = Exdn.to_elixir!(body)
     assert Enum.count(datoms) == 1
   end
 
@@ -77,53 +75,77 @@ defmodule DatomexTest do
 
   test "gets a range of index data with options" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.index_range("eavt", "db/ident", %{limit: 1})
-    {:ok, {:vector, datoms}} = :erldn.parse_str(String.to_char_list(body))
+    datoms = Exdn.to_elixir!(body)
     assert Enum.count(datoms) == 1
   end
 
   test "get an entity" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.entity 1
-    {:ok, {:map, entity}} = :erldn.parse_str(String.to_char_list(body))
-    assert Keyword.fetch(entity, :"db/id") == {:ok, 1}
+    entity = Exdn.to_elixir!(body)
+    assert entity[:"db/id"] == 1
   end
 
   test "get an entity with options" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.entity(%{e: 1, since: 0})
-    {:ok, {:map, entity}} = :erldn.parse_str(String.to_char_list(body))
-    assert Keyword.fetch(entity, :"db/id") == {:ok, 1}
+    entity = Exdn.to_elixir!(body)
+    assert entity[:"db/id"] == 1
   end
 
   test "get an entity with entity and options" do
     {:ok, %HTTPoison.Response{ body: body }} = Datomex.entity(%{e: 1, since: 0})
-    {:ok, {:map, entity}} = :erldn.parse_str(String.to_char_list(body))
-    assert Keyword.fetch(entity, :"db/id") == {:ok, 1}
+    entity = Exdn.to_elixir!(body)
+    assert entity[:"db/id"] == 1
   end
 
   test "query" do
-    Datomex.transact(~s([[:db/add #db/id [:db.part/user] :movie/title "trainspotting"]]))
-    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q(~s([:find ?m :where [?m :movie/title "trainspotting"]]))
-    {:ok, {:vector, movies}} = :erldn.parse_str(String.to_char_list(body)) 
-    {:ok, [movie |_t]} = Keyword.fetch(movies, :vector)
+    insert = [[:"db/add", dbid(:"db.part/user"), :"movie/title", "trainspotting"]
+             ] |> Exdn.from_elixir!
+    Datomex.transact(insert)
+
+    query = [:find, (q? :m),
+             :where, [(q? :m), :"movie/title", "trainspotting"]
+            ] |> Exdn.from_elixir!
+
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q(query)
+    [[movie] |_t] = Exdn.to_elixir!(body)
     assert movie > 1
   end
 
   test "query with options" do
-    Datomex.transact("[[:db/add #db/id [:db.part/user] :movie/title \"the matrix\"]]")
-    Datomex.transact("[[:db/add #db/id [:db.part/user] :movie/title \"the matrix reloaded\"]]")
-    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q("[:find ?m :where [?m :movie/title]]", %{ limit: 1, offset: 2 })
-    {:ok, {:vector, movies}} = :erldn.parse_str(String.to_char_list(body)) 
-    {:ok, [movie |_t]} = Keyword.fetch(movies, :vector)
+    insert1 = [[:"db/add", dbid(:"db.part/user"), :"movie/title", "the matrix"]
+              ] |> Exdn.from_elixir!
+    Datomex.transact(insert1)
+
+    insert2 = [[:"db/add", dbid(:"db.part/user"), :"movie/title", "the matrix reloaded"]
+              ] |> Exdn.from_elixir!
+    Datomex.transact(insert2)
+
+    query = [:find, (q? :m), :where, [(q? :m), :"movie/title"]] |> Exdn.from_elixir!
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q(query, %{ limit: 1, offset: 2 })
+
+    [[movie] |_t] = Exdn.to_elixir!(body)
     assert movie > 1
   end
 
   test "query with args" do
-    args = """
-[
-        ["Doe" "John" "jdoe@example.com"]
-        ["jdoe@example.com" 71]
-]
-"""
-    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q("[:find ?first ?height :in [?last ?first ?email] [?email ?height]]", args)
-    assert :erldn.parse_str(String.to_char_list(body)) == {:ok, {:vector, [vector: ["John", 71]]}}
+    query = [:find, (q? :first), (q? :height),
+             :in, [(q? :last), (q? :first), (q? :email)],
+             [(q? :email), (q? :height)]] |> Exdn.from_elixir!
+
+    args = [ ["Doe", "John", "jdoe@example.com"],
+             ["jdoe@example.com", 71] ] |> Exdn.from_elixir!
+
+    {:ok, %HTTPoison.Response{ body: body }} = Datomex.q(query, args)
+    assert Exdn.to_elixir!(body) == [["John", 71]]
+  end
+
+  def q?(name_atom) do
+    variable_symbol = name_atom |> to_string
+    with_question_mark = "?" <> variable_symbol |> String.to_atom
+    {:symbol, with_question_mark }
+  end
+
+  def dbid(db_part) do
+    {:tag, :"db/id", [db_part]}
   end
 end

@@ -3,8 +3,8 @@ defmodule Datomex.Mixfile do
 
   def project do
     [app: :datomex,
-     version: "0.0.5",
-     elixir: "~> 1.0",
+     version: "0.0.6",
+     elixir: "~> 1.2",
      deps: deps,
      package: [
        contributors: ["Eric West"],
@@ -21,7 +21,7 @@ defmodule Datomex.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :httpoison]]
+    [applications: [:logger, :httpoison, :tzdata]]
   end
 
   # Dependencies can be Hex packages:
@@ -35,9 +35,9 @@ defmodule Datomex.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-        {:erldn, "~> 1.0.2"},
-        {:httpoison, "~> 0.5"},
-        {:poison, "~> 1.2"},
+        {:exdn, "~> 2.1.1"},
+        {:httpoison, "~> 0.8.0"},
+        {:poison, "~> 1.5"},
         {:ex_doc, "~> 0.6.1"}
     ]
   end
